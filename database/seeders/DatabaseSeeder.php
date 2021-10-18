@@ -2,7 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Channel;
 use Illuminate\Database\Seeder;
+use App\Models\User;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,6 +15,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+       User::create([
+            'name' => 'admin',
+            'password' => bcrypt('admin'),
+            'email' => 'admin@example.com',
+            'admin' => 1,
+            'avatar' => asset('avatars/avatar.png')
+        ]);
+
+        Channel::factory(10)->create();
     }
 }
