@@ -17,8 +17,8 @@ class DiscussionController extends Controller
      */
     public function index()
     {
-        return view('auth.discuss.index',[
-            'discussions' => Discussion::all()
+        return view('forum',[
+            'discussions' => Discussion::latest()->paginate(10)
         ]);
     }
 
@@ -65,7 +65,7 @@ class DiscussionController extends Controller
      */
     public function show($slug)
     {
-        $thread = Discussion::find($slug);
+        $thread = Discussion::where('slug', $slug)->first();
 
         return view('Discuss.show',[
             'discussion' => $thread
