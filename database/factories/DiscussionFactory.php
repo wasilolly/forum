@@ -22,7 +22,7 @@ class DiscussionFactory extends Factory
     public function definition()
     {
         return [
-            //
+            
         ];
     }
 }

@@ -5,6 +5,13 @@
         </h2>
     </x-slot>
 
+    <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
+        @guest
+        <a href="{{ route('login') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Log in</a>
+        <a href="{{ route('register') }}" class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">Register</a>
+        @endguest
+    </div>
+
     <x-auth-validation-errors class="mb-4" :errors="$errors" />
 
     <form action="{{ route('discussions.store') }}" method="post">
@@ -27,9 +34,13 @@
             <textarea id="content" class="block mt-1 w-full" rows="15" type="text" name="content"
                 required autofocus /></textarea>
         </div>
+        @auth   
         <x-button class="mt-4">
             {{ __('Create') }}
         </x-button>
+        @else
+        <p>Please <a href="{{route('login')}}" class="underline font-bold">Log in</a> to leave comment</p>
+        @endauth
     </form>
     </div>
 </x-app-layout>

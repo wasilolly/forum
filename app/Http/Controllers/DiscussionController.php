@@ -6,7 +6,7 @@ use App\Models\Discussion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
-
+use App\Models\Reply;
 
 class DiscussionController extends Controller
 {
@@ -17,8 +17,15 @@ class DiscussionController extends Controller
      */
     public function index()
     {
-        return view('forum',[
-            'discussions' => Discussion::latest()->paginate(10)
+        return view('forum', [
+            'discussions' => Discussion::latest()->paginate(5)
+        ]);
+    }
+
+    public function dashboard()
+    {
+        return view('dashboard', [
+            'discussions' => Discussion::latest()->paginate(3)
         ]);
     }
 
@@ -46,13 +53,21 @@ class DiscussionController extends Controller
             'channel_id' => ['required']
         ]);
         $attribute['user_id'] = Auth::user()->id;
-        $attribute['slug'] = Str::slug($request->title);
 
-        //dd($attribute);
+        $slug = Str::slug($request->title);
+        $isSlugUnique =  Discussion::where('slug', $slug)->first();
+        if (isset($isSlugUnique)) {
+            $thisThreadId = Discussion::get()->last()->id;
+            $thisThreadId++;
+            $newSlug = $slug . '-' . $thisThreadId;
+            $attribute['slug'] = $newSlug;
+        } else {
+            $attribute['slug'] = $slug;
+        }
 
         $thread = Discussion::create($attribute);
 
-        return redirect(route('discussions.show',[
+        return redirect(route('discussions.show', [
             'slug' => $thread->slug
         ]));
     }
@@ -67,9 +82,23 @@ class DiscussionController extends Controller
     {
         $thread = Discussion::where('slug', $slug)->first();
 
-        return view('Discuss.show',[
-            'discussion' => $thread
+        return view('Discuss.show', [
+            'discussion' => $thread,
+            'replies' => $thread->replies()->with('user')->paginate(5)
         ]);
     }
 
+    public function reply(Request $request, $slug)
+    {
+        $attribute = $request->validate([
+            'content' => ['required']
+        ]);
+        $discussion_id = Discussion::where('slug', $slug)->first()->id;
+        $attribute['user_id'] = Auth::user()->id;
+        $attribute['discussion_id'] = $discussion_id;
+
+        Reply::create($attribute);
+
+        return back();
+    }
 }

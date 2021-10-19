@@ -58,7 +58,9 @@ class ChannelController extends Controller
      */
     public function show($id)
     {
-        //
+        return view('forum',[
+             'discussions' => Channel::where('id',$id)->first()->discussions()->paginate(5)
+        ]);
     }
 
     /**

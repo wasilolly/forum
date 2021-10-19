@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\Channel;
+use App\Models\Discussion;
+use App\Models\Reply;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 
@@ -15,7 +17,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-       User::create([
+       $user1= User::create([
             'name' => 'admin',
             'password' => bcrypt('admin'),
             'email' => 'admin@example.com',
@@ -24,5 +26,15 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Channel::factory(10)->create();
+
+        $user2 = User::create([
+            'name' => 'Jane Doe',
+            'password' => bcrypt('user'),
+            'email' => 'janedoe@example.com',
+            'admin' => 0,
+            'avatar' => asset('avatars/avatar.png')
+        ]);
+
+    
     }
 }
