@@ -13,6 +13,8 @@ Route::post('/discussion/{slug}/reply', [DiscussionController::class, 'reply'])-
 
 Route::get('/discussion/{id}/like', [ForumController::class, 'like'])->name('discuss.like');
 Route::get('/discussion/{id}/unlike', [ForumController::class, 'unlike'])->name('discuss.unlike');
+Route::get('/discussion/{id}/watch', [ForumController::class, 'watch'])->name('discuss.watch');
+Route::get('/discussion/{id}/unwatch', [ForumController::class, 'unWatch'])->name('discuss.unwatch');
 
  
 require __DIR__.'/auth.php';

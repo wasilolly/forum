@@ -38,6 +38,11 @@ class Discussion extends Model
         return $this->hasMany(Like::class);
     }
 
+    public function watchers()
+    {
+        return $this->hasMany(Watcher::class);
+    }
+
     public function likedByAuthUser()
     {
         $id = Auth::user()->id;
@@ -47,6 +52,21 @@ class Discussion extends Model
             array_push($likers, $like->user_id);
         }
         if (in_array($id, $likers)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function watchedByAuthUser()
+    {
+        $id = Auth::user()->id;
+        $watchers = array();
+
+        foreach ($this->watchers as $watcher) {
+            array_push($watchers, $watcher->user_id);
+        }
+        if (in_array($id, $watchers)) {
             return true;
         }
 

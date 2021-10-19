@@ -5,16 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\Discussion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 use App\Models\Reply;
+use App\Models\User;
+use App\Notifications\NewReplyAdded;
 
 class DiscussionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+   
     public function index()
     {
         return view('forum', [
@@ -29,22 +28,11 @@ class DiscussionController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         return view('discuss.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $attribute = $request->validate([
@@ -72,12 +60,6 @@ class DiscussionController extends Controller
         ]));
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($slug)
     {
         $thread = Discussion::where('slug', $slug)->first();
@@ -93,11 +75,18 @@ class DiscussionController extends Controller
         $attribute = $request->validate([
             'content' => ['required']
         ]);
-        $discussion_id = Discussion::where('slug', $slug)->first()->id;
+        $discussion = Discussion::where('slug', $slug)->first();
+        $discussion_id = $discussion->id;
         $attribute['user_id'] = Auth::user()->id;
         $attribute['discussion_id'] = $discussion_id;
 
         Reply::create($attribute);
+        $watchers = array();
+
+        foreach ($discussion->watchers as $watcher) {
+            array_push($watchers, User::find($watcher->user_id));
+        }
+        Notification::send($watchers, new NewReplyAdded($discussion));
 
         return back();
     }

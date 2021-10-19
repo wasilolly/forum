@@ -4,7 +4,8 @@
             {{ $discussion->title }}
         </h2>
     </x-slot>
-
+    
+    {{-- Auth Guard --}}
     <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
         @guest
         <a href="{{ route('login') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Log in</a>
@@ -15,6 +16,13 @@
     {{-- Disply Thread  --}}
     <section class="mt-2">
         <article class="bg-gray-100 border border-gray-200 p-3 rounded-xl">
+            @auth
+                @if($discussion->watchedByAuthUser())
+                <a href="{{ route('discuss.unwatch', ['id' => $discussion->id])}}"><div class="float-right text-xs ml-3 bg-gray-900 font-bold text-white rounded-lg">unWatch</div></a>
+                @else
+                <a href="{{ route('discuss.watch', ['id' => $discussion->id])}}"><div class="float-right text-xs ml-3 bg-gray-900 font-bold text-white rounded-lg">Watch</div></a>
+                @endif
+            @endauth
             <div class="row">
                 <div class="float-right">{{ $discussion->channel->title }}</div>
                 <img src="https://i.pravatar.cc/60?u={{ $discussion->user_id }}" width="50" height="35" alt="">
@@ -33,12 +41,11 @@
                     <hr>
                         <span class="float-right text-sm italic mt-2">{{$discussion->likes->count()}} Likes</span>
                         @auth                            
-                        @if($discussion->likedByAuthUser())
-
-                            <button class="bg-blue-400 mt-2 border border-blue-800"><a href="{{route('discuss.unlike', ['id'=> $discussion->id])}}">Unlike</a></button> 
-                        @else
-                            <button class="bg-blue-400 mt-2 border border-blue-800"><a href="{{route('discuss.like', ['id'=> $discussion->id])}}">Like</a></button> 
-                        @endif
+                            @if($discussion->likedByAuthUser())
+                                <button class="bg-blue-400 mt-2 border border-blue-800"><a href="{{route('discuss.unlike', ['id'=> $discussion->id])}}">Unlike</a></button> 
+                            @else
+                                <button class="bg-blue-400 mt-2 border border-blue-800"><a href="{{route('discuss.like', ['id'=> $discussion->id])}}">Like</a></button> 
+                            @endif
                         @endauth
                 </main>
             </div>
