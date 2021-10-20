@@ -11,9 +11,11 @@ use App\Models\Reply;
 use App\Models\User;
 use App\Notifications\NewReplyAdded;
 
+
 class DiscussionController extends Controller
 {
-   
+    public $userQuery;
+
     public function index()
     {
         return view('forum', [
@@ -21,11 +23,25 @@ class DiscussionController extends Controller
         ]);
     }
 
-    public function dashboard()
+    public function dashboard(Request $request)
     {
-        return view('dashboard', [
-            'discussions' => Discussion::latest()->paginate(3)
-        ]);
+        $userId = Auth::user()->id;
+        // dd($request->filter);
+        if ($request->filter === 'myreplies') {
+
+            return view('dashboard.replies', [
+                'replies' => User::find($userId)->replies()->paginate(4)->withQueryString()
+            ]);
+        } elseif ($request->filter === 'mylikes') {
+
+            return view('dashboard.likes', [
+                'likes' => User::find($userId)->likes()->paginate(5)->withQueryString()
+            ]);
+        } else {
+            return view('dashboard.threads', [
+                'discussions' => User::find($userId)->discussions()->paginate(5)->withQueryString()
+            ]);
+        }
     }
 
     public function create()

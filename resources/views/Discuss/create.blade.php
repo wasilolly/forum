@@ -12,14 +12,16 @@
         @endguest
     </div>
 
-    <x-auth-validation-errors class="mb-4" :errors="$errors" />
-
+    
     <form action="{{ route('discussions.store') }}" method="post">
         @csrf
         <div>
-            <x-label for="title" :value="__('New Thread')" class=" font-bold" />
+            <x-label for="title" :value="__('New Thread Title')" class=" font-bold" />
             <x-input id="title" class="block mt-1 w-full" type="text" name="title" :value="old('title')" required
                 autofocus />
+            @error('title')
+                <span class="text-xs text-red-500">{{ $message }}</span>
+            @enderror
         </div>
         <div>
             <x-label for="channel" :value="__('Choose Channel')" class=" font-bold" />
@@ -33,6 +35,9 @@
             <x-label for="content" :value="__('Content')" class="font-bold" />
             <textarea id="content" class="block mt-1 w-full" rows="15" type="text" name="content"
                 required autofocus /></textarea>
+            @error('content')
+                <span class="text-xs text-red-500">{{ $message }}</span>
+            @enderror
         </div>
         @auth   
         <x-button class="mt-4">

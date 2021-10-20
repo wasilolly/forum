@@ -72,4 +72,5 @@ class Discussion extends Model
 
         return false;
     }
+
 }

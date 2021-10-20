@@ -26,10 +26,17 @@
 
         <!-- Page Heading -->
         <header class="bg-white shadow">
-            <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+            <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex flex-row">
                 {{ $header }}
             </div>
         </header>
+
+        @if (session()->has('success'))
+            <div x-data="{ show:true}" x-show="show" x-init="setTimeout(() => show = false, 4000)"
+                class=" fixed bg-blue-500 text-white py-2 px-1 w-1/5 rounded-xl right-0 top-30 text-sm">
+                <p>{{ session('success') }}</p>
+            </div>
+        @endif
 
         <!-- Page Content -->
         <main>
@@ -57,5 +64,11 @@
         </main>
     </div>
 </body>
+
+ <!-- AlpineJS -->
+ <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+ <!-- Font Awesome -->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"
+     integrity="sha256-KzZiKy0DWYsnwMF+X1DvQngQ2/FxF7MF3Ff72XcpuPs=" crossorigin="anonymous"></script>
 
 </html>
