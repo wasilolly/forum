@@ -14,19 +14,15 @@ use App\Notifications\NewReplyAdded;
 
 class DiscussionController extends Controller
 {
-    public $userQuery;
 
     public function index()
     {
-        return view('forum', [
-            'discussions' => Discussion::latest()->paginate(5)
-        ]);
+        return view('forum', ['discussions' => Discussion::latest()->paginate(5)]);
     }
 
     public function dashboard(Request $request)
     {
         $userId = Auth::user()->id;
-        // dd($request->filter);
         if ($request->filter === 'myreplies') {
 
             return view('dashboard.replies', [
@@ -47,6 +43,11 @@ class DiscussionController extends Controller
     public function create()
     {
         return view('discuss.create');
+    }
+
+    public function edit($slug)
+    {
+        return view('discuss.edit',['discussion' => Discussion::where('slug',$slug)->first()]);
     }
 
     public function store(Request $request)
@@ -76,6 +77,19 @@ class DiscussionController extends Controller
         ]));
     }
 
+    public function update(Request $request, $slug)
+    {
+        $attribute = $request->validate([
+            'content' => ['required'],
+        ]);
+       
+        $thread = Discussion::where('slug', $slug)->first();
+        $thread->update($attribute);
+
+        return redirect(route('discussions.show', [
+            'slug' => $thread->slug
+        ]));
+    }
     public function show($slug)
     {
         $thread = Discussion::where('slug', $slug)->first();
@@ -97,6 +111,7 @@ class DiscussionController extends Controller
         $attribute['discussion_id'] = $discussion_id;
 
         Reply::create($attribute);
+
         $watchers = array();
 
         foreach ($discussion->watchers as $watcher) {
@@ -105,5 +120,16 @@ class DiscussionController extends Controller
         Notification::send($watchers, new NewReplyAdded($discussion));
 
         return back();
+    }
+
+    public function destroy($slug)
+    {
+        $thread = Discussion::where('slug', $slug)->first();
+        foreach ($thread->replies as $reply) {
+            Reply::find($reply->id)->delete();
+        }
+        $thread->delete();
+
+       return back()->with('success','Channel Deleted');
     }
 }

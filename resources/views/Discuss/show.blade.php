@@ -16,13 +16,18 @@
     {{-- Disply Thread  --}}
     <section class="mt-2">
         <article class="bg-gray-100 border border-gray-200 p-3 rounded-xl">
+            
             @auth
+                @if (auth()->user()->id === $discussion->user_id)
+                <a href="{{ route('discussions.edit', ['slug' => $discussion->slug])}}"><div class="float-right text-xs ml-3 bg-blue-900 font-bold text-white rounded-l ">Edit</div></a> 
+                @endif
                 @if($discussion->watchedByAuthUser())
-                <a href="{{ route('discuss.unwatch', ['id' => $discussion->id])}}"><div class="float-right text-xs ml-3 bg-gray-900 font-bold text-white rounded-lg">unWatch</div></a>
+                <a href="{{ route('discuss.unwatch', ['id' => $discussion->id])}}"><div class="float-right text-xs ml-3 bg-gray-900 font-bold text-white rounded-l">unWatch</div></a>
                 @else
-                <a href="{{ route('discuss.watch', ['id' => $discussion->id])}}"><div class="float-right text-xs ml-3 bg-gray-900 font-bold text-white rounded-lg">Watch</div></a>
+                <a href="{{ route('discuss.watch', ['id' => $discussion->id])}}"><div class="float-right text-xs ml-3 bg-gray-900 font-bold text-white rounded-l">Watch</div></a>
                 @endif
             @endauth
+
             <div class="row">
                 <div class="float-right">{{ $discussion->channel->title }}</div>
                 <img src="https://i.pravatar.cc/60?u={{ $discussion->user_id }}" width="50" height="35" alt="">

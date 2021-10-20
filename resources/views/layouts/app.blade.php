@@ -26,7 +26,7 @@
 
         <!-- Page Heading -->
         <header class="bg-white shadow">
-            <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex flex-row">
+            <div class="max-w-7xl mx-auto py-2 px-4 sm:px-6 lg:px-8 flex flex-row">
                 {{ $header }}
             </div>
         </header>
@@ -40,12 +40,12 @@
 
         <!-- Page Content -->
         <main>
-            <div class="py-12">
+            <div class="py-6">
                 <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div class="p-6 flex">
                         <div class="w-1/5 mt-2">
                            <a href="{{ route('discussions.create') }}">
-                            <x-button class="w-full font-extrabold text-justify ">New Thread</x-button>
+                            <x-button class="w-full font-extrabold text-center ">New Thread</x-button>
                             </a>
                             <div>
                                 <p class="font-bold h-8 ml-5">All Channels</p>
