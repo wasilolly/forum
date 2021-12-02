@@ -1,4 +1,4 @@
-##Forum builon Laravel and Tailwind and AlpinJS
+<h1>Forum builon Laravel and Tailwind and AlpinJS</h1>
 <ul>
     <li>CRUD action on Thread model</li>
     <li>Users can watch threads and are notified via email when new replies are submitted</li>
@@ -6,11 +6,11 @@
 <li>Admin Dashboard to summarize all actions</li>
  </ul>
  
-<div class="snippet-clipboard-content position-relative overflow-auto" data-snippet-clipboard-copy-content="git clone https://github.com/wasilolly/Task-Manager-with-laravel-framework.git 
+<div class="snippet-clipboard-content position-relative overflow-auto" data-snippet-clipboard-copy-content="git clone https://github.com/wasilolly/forum.git 
 composer install
 cp .env.example .env
 ">
-<pre><code>git clone https://github.com/wasilolly/Task-Manager-with-laravel-framework.git
+<pre><code>git clone https://github.com/wasilolly/forum.git
 composer install
 cp .env.example .env
 </code></pre>
