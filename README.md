@@ -1,4 +1,4 @@
-<h1>Forum builon Laravel and Tailwind and AlpinJS</h1>
+<h3>Forum build on Laravel and Tailwind and AlpinJS</h3>
 <ul>
     <li>CRUD action on Thread model</li>
     <li>Users can watch threads and are notified via email when new replies are submitted</li>
